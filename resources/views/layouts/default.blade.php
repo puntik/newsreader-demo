@@ -12,19 +12,20 @@
 				This is the master sidebar.
 			@show
 		</div>
+
 		<div class="pusher">
-			<a href="#" id="show-menu-button">Show menu</a>
-			<a href="#" id="show-3-columns">3 columns</a>
-			<a href="#" id="show-2-columns">2 columns</a>
-			<a href="#" id="show-description">Show description</a>
 			<div class="ui container">
+				<div class="ui menu">
+					<div class="item" id="show-menu-button">
+						<i class="content icon"></i>
+					</div>
+				</div>
 				@yield('content')
 			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="/semantic/semantic.min.js"></script>
-
 		<script type="text/javascript">
 			$('#show-menu-button').click(function() {
 					$('.ui.sidebar')
