@@ -33,6 +33,10 @@ class HelloController extends Controller
 			'en' => 'gb',
 		];
 
+		if (count($category) === 0) {
+			return 'nothing to show';
+		}
+
 		return view('hello.default',
 			[
 				'feeds'      => $feeds,

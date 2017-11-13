@@ -12,7 +12,7 @@ class SendQueue extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'tesco:sent-job';
+	protected $signature = 'tesco:send-job';
 
 	/**
 	 * The console command description.
