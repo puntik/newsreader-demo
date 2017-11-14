@@ -26,6 +26,7 @@
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://js.pusher.com/4.1/pusher.min.js"></script>
 		<script src="/semantic/semantic.min.js"></script>
 		<script type="text/javascript">
 			$('#show-menu-button').click(function() {
@@ -47,6 +48,18 @@
 				$('.description').toggle();
 			});
 
+			// Enable pusher logging - don't include this in production
+			Pusher.logToConsole = true;
+
+			var pusher = new Pusher('527501b81bcc2f3f7b23', {
+				cluster: 'eu',
+				encrypted: true
+			});
+
+			var channel = pusher.subscribe('my-channel');
+			channel.bind('my-event', function(data) {
+				alert(data.message);
+			});
 		</script>
 
 	</body>
