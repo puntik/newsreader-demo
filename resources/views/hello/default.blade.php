@@ -19,8 +19,9 @@
 					<div>{{ $feed->published_at }}</div>
 					<p class="description">{{ str_limit($feed->description, 300, ' ..') }}</p>
 					<div>
-						<div class="ui basic label"><i class="{{ $flags[$feed->language] }} flag"></i></div>
-						<div class="ui label"><i class="globe icon"></i> {{ $feed->source }}</div>
+						<div class="ui basic label">
+							<i class="{{ $flags[$feed->language] }} flag"></i> {{ $feed->source }}
+						</div>
 					</div>
 				</div>
 			</div>
