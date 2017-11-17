@@ -5,7 +5,8 @@
 		<link rel="shortcut icon" href="/favicon.png">
 		<meta charset="UTF-8">
 		<title>@yield('title') - newsreader.cz</title>
-		<link rel="stylesheet" href="/semantic/semantic.min.css"/>
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+		<link href="{{ asset('semantic/semantic.min.css') }}" rel="stylesheet">
 	</head>
 	<body>
 		<div class="ui sidebar wide vertical menu">
@@ -19,6 +20,18 @@
 				<div class="ui menu">
 					<div class="item" id="show-menu-button">
 						<i class="content icon"></i>
+					</div>
+					<div class="right item">
+						@guest
+							<a href="/login">Sign in</a>
+						@else
+							<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+								Logout
+							</a>
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								{{ csrf_field() }}
+							</form>
+						@endguest
 					</div>
 				</div>
 				@yield('content')
@@ -34,6 +47,9 @@
 					.sidebar('toggle');
 				}
 			);
+
+			$('.ui.checkbox').checkbox();
+
 		</script>
 	</body>
 </html>
