@@ -47,13 +47,13 @@ class HelloController extends Controller
 		);
 	}
 
-	private function loadFeeds(int $id)
+	private function loadFeeds(int $categoryId)
 	{
 		// find all fields by category id
 		return DB::table('feed')
 				 ->join('source', 'source.id', '=', 'feed.source_id')
 				 ->join('category', 'category.id', '=', 'source.category_id')
-				 ->where('source.category_id', '=', $id)
+				 ->where('source.category_id', '=', $categoryId)
 				 ->select(
 					 [
 						 'feed.title',
@@ -65,6 +65,7 @@ class HelloController extends Controller
 						 'source.title AS source',
 						 'published_at',
 						 'source.language',
+						 DB::raw('HOUR(TIMEDIFF(now(), published_at)) AS age_hours')
 					 ]
 				 )
 				 ->orderBy('id', 'desc')

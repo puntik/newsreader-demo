@@ -22,6 +22,8 @@
 						<div class="ui basic label">
 							<i class="{{ $flags[$feed->language] }} flag"></i> {{ $feed->source }}
 						</div>
+						@if($feed->age_hours === 0)<div class="ui label">před hodinou</div>@endif
+						@if($feed->age_hours < (new DateTime())->format('H'))<div class="ui label">dnes</div>@endif
 					</div>
 				</div>
 			</div>
