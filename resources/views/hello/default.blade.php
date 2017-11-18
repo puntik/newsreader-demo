@@ -4,7 +4,7 @@
 
 @section('sidebar')
 	@component('categories', ['categories' => $categories])
-		Component categories not found or something is wrong
+		@lang('Component categories not found or something is wrong')
 	@endcomponent
 @endsection
 
@@ -22,8 +22,8 @@
 						<div class="ui basic label">
 							<i class="{{ $flags[$feed->language] }} flag"></i> {{ $feed->source }}
 						</div>
-						@if($feed->age_hours === 0)<div class="ui label">před hodinou</div>@endif
-						@if($feed->age_hours < (new DateTime())->format('H'))<div class="ui label">dnes</div>@endif
+						@if($feed->age_hours === 0)<div class="ui label">@lang('one hour ago')</div>@endif
+						@if($feed->age_hours < (new DateTime())->format('H'))<div class="ui label">@lang('today')</div>@endif
 					</div>
 				</div>
 			</div>

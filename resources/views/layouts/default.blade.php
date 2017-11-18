@@ -23,10 +23,10 @@
 					</div>
 					<div class="right item">
 						@guest
-							<a href="/login">Sign in</a>
+							<a href="/login">@lang('messages.signIn')</a>
 						@else
 							<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-								Logout
+								@lang('messages.signOut')
 							</a>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 								{{ csrf_field() }}
