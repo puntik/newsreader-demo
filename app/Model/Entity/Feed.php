@@ -3,9 +3,12 @@
 namespace App\Model\Entity;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Feed extends Model
 {
+
+	use Searchable;
 
 	protected $table = 'feed';
 
@@ -18,4 +21,10 @@ class Feed extends Model
 	{
 		return $this->belongsTo(Source::class);
 	}
+
+	public function searchableAs(): string
+	{
+		return 'a1';
+	}
+
 }
