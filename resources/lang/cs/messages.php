@@ -7,4 +7,6 @@ return [
 	'rememberMe'      => 'Pamatovat si přihlášení',
 	'usernameOrEmail' => 'Uživatelské jméno nebo e-mail',
 	'password'        => 'Heslo',
+	'today'           => 'dnes',
+	'oneHourAgo'      => 'před hodinou',
 ];
