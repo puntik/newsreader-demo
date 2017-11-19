@@ -20,7 +20,7 @@ class HelloController extends Controller
 		$this->client = $client;
 	}
 
-	public function __invoke(int $id)
+	public function __invoke(int $id, string $categoryName)
 	{
 		$name       = Request::query('name', 'Abetzi');
 		$feeds      = $this->loadFeeds($id);
@@ -65,7 +65,7 @@ class HelloController extends Controller
 						 'source.title AS source',
 						 'published_at',
 						 'source.language',
-						 DB::raw('HOUR(TIMEDIFF(now(), published_at)) AS age_hours')
+						 DB::raw('HOUR(TIMEDIFF(now(), published_at)) AS age_hours'),
 					 ]
 				 )
 				 ->orderBy('id', 'desc')

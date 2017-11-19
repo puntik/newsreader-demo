@@ -2,7 +2,7 @@
 
 Route::get('/', '\App\Http\Controllers\WelcomeController');
 
-Route::get('/hello/{id}', '\App\Http\Controllers\HelloController');
+Route::get('/ca/{id}-{name}', '\App\Http\Controllers\HelloController')->name('category');
 
 \Illuminate\Support\Facades\Auth::routes();
 
