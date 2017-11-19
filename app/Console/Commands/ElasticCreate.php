@@ -70,7 +70,7 @@ class ElasticCreate extends Command
 						'type'   => 'date',
 						'format' => 'yyyy-MM-dd HH:mm||yyyy-MM-dd',
 					],
-					'publisedAt'  => [
+					'publishedAt' => [
 						'type'   => 'date',
 						'format' => 'yyyy-MM-dd HH:mm||yyyy-MM-dd',
 					],

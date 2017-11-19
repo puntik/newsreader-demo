@@ -111,7 +111,7 @@ class HelloController extends Controller
 					  "aggs": {
 						"by_categories_intervals": {
 						  "range": {
-							"field": "createdAt",
+							"field": "publishedAt",
 							"ranges": [
 							  {
 								"key": "last_week",
@@ -139,7 +139,7 @@ class HelloController extends Controller
 					  "aggs": {
 						"by_sources_intervals": {
 						  "range": {
-							"field": "createdAt",
+							"field": "publishedAt",
 							"ranges": [
 							  {
 								"key": "last_week",
@@ -165,7 +165,7 @@ class HelloController extends Controller
 					  "size": 0,
 					  "_source": [
 						"title",
-						"createdAt",
+						"publishAt",
 						"sourceId",
 						"cateogoryId"
 				    ]
