@@ -68,7 +68,7 @@ class HelloController extends Controller
 						 DB::raw('HOUR(TIMEDIFF(now(), published_at)) AS age_hours'),
 					 ]
 				 )
-				 ->orderBy('id', 'desc')
+				 ->orderBy('feed.published_at', 'desc')
 				 ->paginate(self::PAGE_SIZE);
 	}
 
