@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Console\Commands;
 
@@ -58,15 +58,7 @@ class ElasticDataFill extends Command
 
 	private function indexFeed(Feed $feed, string $indexName)
 	{
-		$body = [
-			'id'          => $feed->id,
-			'title'       => $feed->title,
-			'description' => $feed->description,
-			'createdAt'   => $feed->created_at->format('Y-m-d H:i'),
-			'publishedAt' => $feed->published_at->format('Y-m-d H:i'),
-			'sourceId'    => $feed->source->id,
-			'categoryId'  => $feed->source->category_id,
-		];
+		$body = $feed->toSearchableArray();
 
 		$this->esClient->index(
 			[
@@ -74,7 +66,6 @@ class ElasticDataFill extends Command
 				'type'  => 'feed',
 				'id'    => $feed->id,
 				'body'  => $body,
-
 			]
 		);
 	}

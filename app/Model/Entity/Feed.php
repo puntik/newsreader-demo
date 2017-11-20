@@ -10,6 +10,8 @@ class Feed extends Model
 
 	use Searchable;
 
+	public const FEED_INDEX = 'a1';
+
 	protected $table = 'feed';
 
 	protected $dates = [
@@ -24,7 +26,19 @@ class Feed extends Model
 
 	public function searchableAs(): string
 	{
-		return 'a1';
+		return self::FEED_INDEX;
 	}
 
+	public function toSearchableArray()
+	{
+		return [
+			'id'          => $this->id,
+			'title'       => $this->title,
+			'description' => $this->description,
+			'createdAt'   => $this->created_at->format('Y-m-d H:i'),
+			'publishedAt' => $this->published_at->format('Y-m-d H:i'),
+			'sourceId'    => $this->source->id,
+			'categoryId'  => $this->source->category_id,
+		];
+	}
 }
