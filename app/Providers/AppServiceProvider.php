@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Model\Entity\Clubcard;
 use App\Model\Entity\ClubcardObserver;
+use App\Model\Services\Elastic;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
 			return ClientBuilder::create()
 								->setHosts(['localhost'])
 								->build();
+		});
+
+		$this->app->singleton(Elastic::class, function ($app): Elastic {
+			return new Elastic(
+				$app->make(Client::class)
+			);
 		});
 	}
 }
