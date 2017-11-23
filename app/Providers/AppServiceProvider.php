@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Model\Entity\Clubcard;
 use App\Model\Entity\ClubcardObserver;
 use App\Model\Entity\Feed;
+use App\Model\Services\Downloader;
 use App\Model\Services\Elastic;
 use App\Observers\FeedObserver;
 use Elasticsearch\Client;
@@ -40,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
 			return ClientBuilder::create()
 								->setHosts(['localhost'])
 								->build();
+		});
+
+		$this->app->singleton(Downloader::class, function ($app) {
+			return new Downloader();
 		});
 
 		$this->app->singleton(Elastic::class, function ($app): Elastic {
