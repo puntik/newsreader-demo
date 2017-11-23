@@ -3,11 +3,14 @@
 namespace App\Console\Commands\Reader;
 
 use App\Model\Entity\Feed;
+use App\Model\Entity\Source;
 use App\Model\Services\Elastic;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Dowloader extends Command
 {
@@ -39,11 +42,15 @@ class Dowloader extends Command
 		$feedSourcePath = 'feed_source';
 
 		// 1 .. from db load all Sources to download
-		$sources = \App\Model\Entity\Source::where('active', true)->limit(20)->get();
+		$sources = Source::where('active', true)->get();
 
 		// 2 .. in cycle - download files to parse
 		foreach ($sources as $source) {
-			$this->info(sprintf('Downloading #%d', $source->id));
+			// @todo remove me or log me in logger way
+			$this->info(
+				sprintf('Downloading #%d %s', $source->id, $source->title),
+				OutputInterface::VERBOSITY_VERBOSE
+			);
 
 			$rssFile = sprintf('%s/%d.xml', Storage::path($feedSourcePath), $source->id);
 
@@ -57,49 +64,56 @@ class Dowloader extends Command
 					throw new \InvalidArgumentException('Unexpected response code');
 				}
 
-				// 3 .. parse file and save it to db - including indexing into elastic search
-				$root = simplexml_load_file($rssFile);
-				if ($root === false) {
-					$msg = sprintf("Problem with opening xml file %s.", $rssFile);
-				}
+				$feeds = $this->createFeedsFromFile($source, $rssFile);
 
-				$items = $root->xpath('//rss/channel/item');
-
-				foreach ($items as $item) {
-					$publishedAt = new Carbon($item->pubDate);
-
-					$feed               = new Feed();
-					$feed->title        = (string) $item->title;
-					$feed->link         = (string) $item->link;
-					$feed->description  = (string) $item->description;
-					$feed->published_at = $publishedAt;
-					$feed->active       = true;
-
-					$feed->source()->associate($source);
-
-					// check if record already exist
-					// @todo - index on link column
-					$old = Feed::where(['link' => $item->link])->first();
-					if ($old === null) {
-						$feed->save();
-
-						// indexing to elastic search
-						// @todo use scout or saved method
-						$this->elastic->indexFeed($feed);
-					} else {
-						$this->warn(sprintf('Found old feed with #%d', $old->id));
-					}
+				foreach ($feeds as $feed) {
+					$feed->save();    // saving and indexing (in observer)
 				};
 			} catch (\GuzzleHttp\Exception\RequestException $e) {
-				$this->error(sprintf('Downloading source [%s, id: %d] failed.', $source->title, $source->id));
+				Log::error(sprintf('Downloading source [%s, id: %d] failed.', $source->title, $source->id));
 				$source->active = false;
 				$source->save();
 			} catch (\Throwable $e) {
-				$this->error($e->getTraceAsString());
-				$this->error($e->getMessage());
+				Log::error($e->getMessage());
 				$source->active = false;
 				$source->save();
 			}
 		}
+	}
+
+	private function createFeedsFromFile(Source $source, string $rssFile): array
+	{
+		$feeds = [];
+		$root  = simplexml_load_file($rssFile);
+		if ($root === false) {
+			Log::error(sprintf("Problem with opening xml file %s.", $rssFile));
+
+			return $feeds;
+		}
+
+		$items = $root->xpath('//rss/channel/item');
+
+		foreach ($items as $item) {
+			$old = Feed::where(['link' => $item->link])->first();
+
+			if ($old !== null) {
+				continue;
+			}
+
+			$publishedAt = new Carbon($item->pubDate);
+
+			$feed               = new Feed();
+			$feed->title        = (string) $item->title;
+			$feed->link         = (string) $item->link;
+			$feed->description  = (string) $item->description;
+			$feed->published_at = $publishedAt;
+			$feed->active       = true;
+
+			$feed->source()->associate($source);
+
+			$feeds[] = $feed;
+		}
+
+		return $feeds;
 	}
 }

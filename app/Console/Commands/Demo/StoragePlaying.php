@@ -4,6 +4,7 @@ namespace App\Console\Commands\Demo;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class StoragePlaying extends Command
 {
@@ -60,9 +61,23 @@ class StoragePlaying extends Command
 		$url     = 'https://www.idnes.cz/';
 		$rssFile = sprintf('%s/1.xml', Storage::path($feedSourcePath));
 
+		/*
 		$response = $guzzleClient->get($url, [
 			'save_to' => $rssFile,
 			'timeout' => 5,
 		]);
+		*/
+
+		$this->line('line');
+		$this->info('info');
+		$this->warn('warn');
+		$this->error('error');
+
+		$this->info('info - no verbosity set');                                                  // -vvv -vv -v x
+		$this->info('info - verobosity NORMAL', OutputInterface::VERBOSITY_NORMAL);              // -vvv -vv -v x
+		$this->info('info - verobosity QUIET', OutputInterface::VERBOSITY_QUIET);                // -vvv -vv -v -q x
+		$this->info('info - verobosity VERBOSE', OutputInterface::VERBOSITY_VERBOSE);            // -vvv -vv -v
+		$this->info('info - verobosity VERY VERBOSE', OutputInterface::VERBOSITY_VERY_VERBOSE);  // -vvv -vv
+		$this->info('info - verobosity DEBUG', OutputInterface::VERBOSITY_DEBUG);                // -vvv
 	}
 }

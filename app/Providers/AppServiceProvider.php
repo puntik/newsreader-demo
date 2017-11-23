@@ -4,10 +4,11 @@ namespace App\Providers;
 
 use App\Model\Entity\Clubcard;
 use App\Model\Entity\ClubcardObserver;
+use App\Model\Entity\Feed;
 use App\Model\Services\Elastic;
+use App\Observers\FeedObserver;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		Clubcard::observe(ClubcardObserver::class);
+		Feed::observe(FeedObserver::class);
 	}
 
 	/**
