@@ -53,13 +53,17 @@ class Downloader
 			};
 		} catch (\GuzzleHttp\Exception\RequestException $e) {
 			Log::error(sprintf('Downloading source [%s, id: %d] failed.', $source->title, $source->id));
-			$source->active = false;
-			$source->save();
+			$this->inactiveSource($source);
 		} catch (\Throwable $e) {
 			Log::error($e->getMessage());
-			$source->active = false;
-			$source->save();
+			$this->inactiveSource($source);
 		}
+	}
+
+	private function inactiveSource(Source $source)
+	{
+		$source->active = false;
+		$source->save();
 	}
 
 	private function createFeedsFromFile(Source $source, string $rssFile): array
