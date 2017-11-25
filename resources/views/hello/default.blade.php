@@ -17,7 +17,7 @@
 				<div>
 					<a href="{{ $feed->link }}" target="_blank" class="ui small header" style="text-decoration: underline;">{{ $feed->title }}</a>
 					<div>{{ $feed->published_at }}</div>
-					<p class="description">{{ str_limit($feed->description, 300, ' ..') }}</p>
+					<p class="description">{{ str_limit($feed->description, 350, ' ..') }}</p>
 					<div>
 						<div class="ui basic label">
 							<i class="{{ $flags[$feed->language] }} flag"></i> {{ $feed->source }}

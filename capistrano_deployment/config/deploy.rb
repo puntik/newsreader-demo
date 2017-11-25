@@ -51,6 +51,17 @@ namespace :composer do
 	end
 end
 
+namespace :directories do
+	desc "Check permission for storage directories"
+		task :set_privileges do
+			on roles(:web) do
+				within release_path do
+					execute "cd #{release_path}/storage; find -type d -exec chmod 777 {} \\;"
+			end
+		end
+	end
+end
+
 namespace :artisan do
 	desc "Provide artisan magic"
 		task :migrate do
@@ -63,5 +74,6 @@ end
 
 namespace :deploy do
 	after :updated, "composer:install"
+	after :updated, "directories:set_privileges"
 	after "composer:install", "artisan:migrate"
 end

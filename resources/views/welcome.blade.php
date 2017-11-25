@@ -2,8 +2,8 @@
 
 @section('sidebar')
 	this is a sidebar
-
-	Bootstrap
-
-
+	Semantic
+	Laravel
+	Elastic
+	Redis
 @endsection
