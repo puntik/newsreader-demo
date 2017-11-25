@@ -25,13 +25,9 @@ class HelloController extends Controller
 
 	public function __invoke(int $id, string $categoryName)
 	{
-		$feeds = $this->loadFeeds($id);
-
-		$categories = Cache::remember('categories:menu', 15 * 60, function () {
-			return $this->categoryRepository->loadCategories();
-		});
-
-		$category = Category::find($id);
+		$feeds      = $this->loadFeeds($id);
+		$categories = $this->categoryRepository->loadCategories();
+		$category   = Category::find($id);
 
 		$flags = [
 			'cs' => 'cz',
