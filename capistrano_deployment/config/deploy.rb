@@ -57,6 +57,7 @@ namespace :directories do
 			on roles(:web) do
 				within release_path do
 					execute "cd #{release_path}/storage; find -type d -exec chmod 777 {} \\;"
+					execute "mkdir -p #{release_path}/storage/app/feed_source"
 			end
 		end
 	end

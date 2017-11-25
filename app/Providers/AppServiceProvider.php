@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Model\Entity\Clubcard;
 use App\Model\Entity\ClubcardObserver;
 use App\Model\Entity\Feed;
+use App\Model\Services\Category\CategoryRepository;
+use App\Model\Services\Category\EloquentCategoryRepository;
 use App\Model\Services\Downloader;
 use App\Model\Services\Elastic;
 use App\Observers\FeedObserver;
@@ -49,6 +51,12 @@ class AppServiceProvider extends ServiceProvider
 
 		$this->app->singleton(Elastic::class, function ($app): Elastic {
 			return new Elastic(
+				$app->make(Client::class)
+			);
+		});
+
+		$this->app->singleton(CategoryRepository::class, function ($app): CategoryRepository {
+			return new EloquentCategoryRepository(
 				$app->make(Client::class)
 			);
 		});
