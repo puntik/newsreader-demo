@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Entity\Category;
 use App\Model\Services\Category\EloquentCategoryRepository;
-use Elasticsearch\Client;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
 
 class HelloController extends Controller
 {
