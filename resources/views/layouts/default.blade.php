@@ -47,9 +47,22 @@
 					.sidebar('toggle');
 				}
 			);
-
 			$('.ui.checkbox').checkbox();
-
 		</script>
+		@if(\Illuminate\Support\Facades\App::environment('production'))
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-8529556-11"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+
+				function gtag() {
+					dataLayer.push(arguments);
+				}
+
+				gtag('js', new Date());
+
+				gtag('config', 'UA-8529556-11');
+			</script>
+		@endif
 	</body>
 </html>
