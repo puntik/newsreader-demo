@@ -178,11 +178,6 @@ return [
 		App\Providers\RouteServiceProvider::class,
 
 		/**
-		 * Tesco providers
-		 */
-		\App\Providers\Tesco\TescoServiceProvider::class,
-
-		/**
 		 * Debugger provicers
 		 */
 		\Barryvdh\Debugbar\ServiceProvider::class,
@@ -237,8 +232,6 @@ return [
 		'View'         => Illuminate\Support\Facades\View::class,
 
 		'Debugbar' => \Barryvdh\Debugbar\Facade::class,
-		'Tesco'    => \App\Facade\Tesco::class,
-
 	],
 
 ];

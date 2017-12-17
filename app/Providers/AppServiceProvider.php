@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		Clubcard::observe(ClubcardObserver::class);
 		Feed::observe(FeedObserver::class);
 	}
 
