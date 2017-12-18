@@ -36,10 +36,12 @@
 						<label>@lang('messages.rememberMe')</label>
 					</div>
 				</div>
-
 				<button type="submit" class="ui button">
 					@lang('messages.signIn')
 				</button>
+				<a class="ui right floated black github button" href="{{ url('/login/github') }}">
+					<i class="github icon"></i>@lang('messages.github')
+				</a>
 			</form>
 		</div>
 	</div>

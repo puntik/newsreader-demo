@@ -9,4 +9,5 @@ return [
 	'password'        => 'Heslo',
 	'today'           => 'dnes',
 	'oneHourAgo'      => 'před hodinou',
+	'github'          => 'Github',
 ];
