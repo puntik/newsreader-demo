@@ -2,13 +2,12 @@
 
 namespace App\Providers;
 
-use App\Model\Entity\Clubcard;
-use App\Model\Entity\ClubcardObserver;
 use App\Model\Entity\Feed;
 use App\Model\Services\Category\CategoryRepository;
 use App\Model\Services\Category\EloquentCategoryRepository;
 use App\Model\Services\Downloader;
 use App\Model\Services\Elastic;
+use App\Model\Services\ToggleManager\FeaturesManager;
 use App\Model\Services\ToggleManager\ToggleManagerBuilder;
 use App\Observers\FeedObserver;
 use Elasticsearch\Client;
@@ -45,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 								->build();
 		});
 
-		$this->app->bind(ToggleManagerBuilder::class, function (): ToggleManagerBuilder {
+		$this->app->bind(ToggleManagerBuilder::class, function (): FeaturesManager {
 			return ToggleManagerBuilder::getInstance();
 		});
 

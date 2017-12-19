@@ -4,13 +4,12 @@ namespace App\Model\Services\ToggleManager;
 
 use Qandidate\Toggle\Context;
 use Qandidate\Toggle\Operator\EqualTo;
-use Qandidate\Toggle\Operator\LessThan;
 use Qandidate\Toggle\OperatorCondition;
 use Qandidate\Toggle\Toggle;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Qandidate\Toggle\ToggleManager;
 
-class ToggleManagerBuilder
+class ToggleManagerBuilder implements FeaturesManager
 {
 
 	/** @var ToggleManager */
@@ -25,7 +24,7 @@ class ToggleManagerBuilder
 		$this->toggleContext = $this->buildContext();
 	}
 
-	public static function getInstance(): ToggleManagerBuilder
+	public static function getInstance(): FeaturesManager
 	{
 		return new self();
 	}

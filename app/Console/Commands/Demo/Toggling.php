@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Demo;
 
-use App\Facade\ToggleManager;
+use App\Facade\FeatureManager;
 use App\Model\Services\ToggleManager\Features;
 use Illuminate\Console\Command;
 
@@ -22,6 +22,6 @@ class Toggling extends Command
 
 	public function handle()
 	{
-		var_dump(ToggleManager::isActive(Features::GITHUB_LOGIN));
+		var_dump(FeatureManager::isActive(Features::GITHUB_LOGIN));
 	}
 }

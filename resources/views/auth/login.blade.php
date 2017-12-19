@@ -40,7 +40,7 @@
 					@lang('messages.signIn')
 				</button>
 				@includeWhen(
-					App\Facade\ToggleManager::isActive(\App\Model\Services\ToggleManager\Features::GITHUB_LOGIN),
+					App\Facade\FeatureManager::isActive(\App\Model\Services\ToggleManager\Features::GITHUB_LOGIN),
 					'auth.github'
 				)
 			</form>

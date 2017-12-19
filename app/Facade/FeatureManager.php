@@ -5,7 +5,7 @@ namespace App\Facade;
 use App\Model\Services\ToggleManager\ToggleManagerBuilder;
 use Illuminate\Support\Facades\Facade;
 
-class ToggleManager extends Facade
+class FeatureManager extends Facade
 {
 
 	protected static function getFacadeAccessor()
