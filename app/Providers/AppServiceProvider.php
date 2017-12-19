@@ -9,6 +9,7 @@ use App\Model\Services\Category\CategoryRepository;
 use App\Model\Services\Category\EloquentCategoryRepository;
 use App\Model\Services\Downloader;
 use App\Model\Services\Elastic;
+use App\Model\Services\ToggleManager\ToggleManagerBuilder;
 use App\Observers\FeedObserver;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
@@ -42,6 +43,10 @@ class AppServiceProvider extends ServiceProvider
 			return ClientBuilder::create()
 								->setHosts(['localhost'])
 								->build();
+		});
+
+		$this->app->bind(ToggleManagerBuilder::class, function (): ToggleManagerBuilder {
+			return ToggleManagerBuilder::getInstance();
 		});
 
 		$this->app->singleton(Downloader::class, function ($app) {

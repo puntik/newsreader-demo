@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "091e471b09df7f326a6325a4defac341",
+    "content-hash": "8d972a0e2dbf00526899c9325188b4b2",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -774,6 +774,57 @@
                 "search"
             ],
             "time": "2017-11-08T17:04:47+00:00"
+        },
+        {
+            "name": "eloquent/enumeration",
+            "version": "5.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eloquent/enumeration.git",
+                "reference": "0242859435d9b135939816858348556d3cde9e3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eloquent/enumeration/zipball/0242859435d9b135939816858348556d3cde9e3c",
+                "reference": "0242859435d9b135939816858348556d3cde9e3c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "icecave/archer": "dev-develop",
+                "phpunit/phpunit": "^4",
+                "sami/sami": "^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Eloquent\\Enumeration\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erin Millard",
+                    "email": "ezzatron@gmail.com",
+                    "homepage": "http://ezzatron.com/"
+                }
+            ],
+            "description": "An enumeration implementation for PHP.",
+            "homepage": "https://github.com/eloquent/enumeration",
+            "keywords": [
+                "class",
+                "enum",
+                "enumeration",
+                "multiton",
+                "set",
+                "type"
+            ],
+            "time": "2015-11-03T22:21:38+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -2421,6 +2472,64 @@
                 "shell"
             ],
             "time": "2017-12-10T21:49:27+00:00"
+        },
+        {
+            "name": "qandidate/toggle",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qandidate-labs/qandidate-toggle.git",
+                "reference": "a7f7f4e478373622f945a6e9c163adb5b50b3265"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qandidate-labs/qandidate-toggle/zipball/a7f7f4e478373622f945a6e9c163adb5b50b3265",
+                "reference": "a7f7f4e478373622f945a6e9c163adb5b50b3265",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35",
+                "predis/predis": "~0.8",
+                "symfony/expression-language": "~2.4"
+            },
+            "suggest": {
+                "predis/predis": "To use the PredisCollection to persist toggles in redis",
+                "symfony/expression-language": "To use the ExpressionCondition to add conditions as a symfony language expression"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qandidate\\Toggle\\": "lib/Qandidate/Toggle/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander",
+                    "email": "iam.asm89@gmail.com"
+                },
+                {
+                    "name": "Qandidate.com",
+                    "homepage": "http://labs.qandidate.com/"
+                }
+            ],
+            "description": "Feature toggling for your PHP application.",
+            "keywords": [
+                "bits",
+                "feature",
+                "flip",
+                "flipping",
+                "switch",
+                "toggle",
+                "trigger"
+            ],
+            "time": "2017-11-20T14:59:50+00:00"
         },
         {
             "name": "ramsey/uuid",

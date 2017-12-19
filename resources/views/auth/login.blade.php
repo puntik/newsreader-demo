@@ -39,9 +39,10 @@
 				<button type="submit" class="ui button">
 					@lang('messages.signIn')
 				</button>
-				<a class="ui right floated black github button" href="{{ url('/login/github') }}">
-					<i class="github icon"></i>@lang('messages.github')
-				</a>
+				@includeWhen(
+					App\Facade\ToggleManager::isActive(\App\Model\Services\ToggleManager\Features::GITHUB_LOGIN),
+					'auth.github'
+				)
 			</form>
 		</div>
 	</div>
