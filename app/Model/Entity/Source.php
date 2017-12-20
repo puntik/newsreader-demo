@@ -24,4 +24,11 @@ class Source extends Model
 	{
 		return $this->belongsTo(Category::class);
 	}
+
+	public function disable(): self
+	{
+		$this->active = false;
+
+		return $this;
+	}
 }

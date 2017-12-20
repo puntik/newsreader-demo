@@ -5,6 +5,7 @@ namespace App\Model\Services;
 use App\Model\Entity\Feed;
 use App\Model\Entity\Source;
 use GuzzleHttp\Client;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -17,9 +18,9 @@ class Downloader
 	/** @var Client */
 	private $guzzleClient;
 
-	public function __construct()
+	public function __construct(Client $guzzleClient)
 	{
-		$this->guzzleClient = new Client();
+		$this->guzzleClient = $guzzleClient;
 	}
 
 	public function processSources(): void
@@ -42,7 +43,7 @@ class Downloader
 				'timeout' => 5,
 			]);
 
-			if ($response->getStatusCode() !== 200) {
+			if ($response->getStatusCode() !== Response::HTTP_OK) {
 				throw new \InvalidArgumentException('Unexpected response code');
 			}
 
@@ -53,17 +54,11 @@ class Downloader
 			};
 		} catch (\GuzzleHttp\Exception\RequestException $e) {
 			Log::error(sprintf('Downloading source [%s, id: %d] failed.', $source->title, $source->id));
-			$this->inactiveSource($source);
+			$source->disable()->save();
 		} catch (\Throwable $e) {
 			Log::error($e->getMessage());
-			$this->inactiveSource($source);
+			$source->disable()->save();
 		}
-	}
-
-	private function inactiveSource(Source $source)
-	{
-		$source->active = false;
-		$source->save();
 	}
 
 	private function createFeedsFromFile(Source $source, string $rssFile): array

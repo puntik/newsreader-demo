@@ -38,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
 			$this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 		}
 
+		// Guzzle Client
+		$this->app->bind(\GuzzleHttp\Client::class, function (): \GuzzleHttp\Client {
+			return new \GuzzleHttp\Client();
+		});
+
+		// Elastic search client
 		$this->app->bind(Client::class, function ($app): Client {
 			return ClientBuilder::create()
 								->setHosts(['localhost'])
@@ -49,7 +55,9 @@ class AppServiceProvider extends ServiceProvider
 		});
 
 		$this->app->singleton(Downloader::class, function ($app) {
-			return new Downloader();
+			return new Downloader(
+				$app->make(\GuzzleHttp\Client::class)
+			);
 		});
 
 		$this->app->singleton(Elastic::class, function ($app): Elastic {
