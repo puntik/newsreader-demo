@@ -14,12 +14,14 @@
 				This is the master sidebar.
 			@show
 		</div>
-
 		<div class="pusher">
 			<div class="ui container">
-				<div class="ui menu">
+				<div class="ui link menu">
 					<div class="item" id="show-menu-button">
 						<i class="content icon"></i>
+					</div>
+					<div class="item">
+						<a href="/"><i class="home icon"></i></a>
 					</div>
 					<div class="right item">
 						@guest
@@ -49,8 +51,8 @@
 			);
 			$('.ui.checkbox').checkbox();
 		</script>
-		@if(\Illuminate\Support\Facades\App::environment('production'))
-			<!-- Global site tag (gtag.js) - Google Analytics -->
+	@if(\Illuminate\Support\Facades\App::environment('production'))
+		<!-- Global site tag (gtag.js) - Google Analytics -->
 			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-8529556-11"></script>
 			<script>
 				window.dataLayer = window.dataLayer || [];

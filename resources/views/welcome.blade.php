@@ -13,7 +13,7 @@
 				<div class="content">
 					<div class="header">
 						<a href="{{ $category->routeSlug() }}">
-							<i class="external square icon"></i>
+							<i class="external icon"></i>
 						</a>
 						{{ $category->title }}</div>
 					<div class="meta">
