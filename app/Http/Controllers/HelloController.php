@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class HelloController extends Controller
 {
 
-	const PAGE_SIZE = 24;
+	private const PAGE_SIZE = 24;
 
 	/** @var EloquentCategoryRepository */
 	private $categoryRepository;

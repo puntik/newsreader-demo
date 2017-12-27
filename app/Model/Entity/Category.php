@@ -23,4 +23,9 @@ class Category extends Model
 	{
 		return $this->hasManyThrough(Feed::class, Source::class);
 	}
+
+	public function routeSlug(): string
+	{
+		return route('category', ['id' => $this->id, 'name' => str_slug($this->title)]);
+	}
 }

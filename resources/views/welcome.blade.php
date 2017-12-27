@@ -12,7 +12,7 @@
 			<div class="card">
 				<div class="content">
 					<div class="header">
-						<a href="{{ route('category', ['id'=>$category->id, 'name'=>str_slug($category->title)]) }}">
+						<a href="{{ $category->routeSlug() }}">
 							<i class="external square icon"></i>
 						</a>
 						{{ $category->title }}</div>
@@ -38,4 +38,23 @@
 			</div>
 		@endforeach
 	</div>
+
+	<table class="ui grey very compact table">
+		<thead>
+			<tr>
+				<th colspan="3">Nejnovější zprávy</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(@$newestFeeds as $feed)
+				<tr>
+					<td><a href="{{ $feed->link }}">{{ $feed->title }}</a></td>
+					<td>
+						<a href="{{ $feed->source->category->routeSlug() }}">{{ $feed->source->category->title }}</a>
+					</td>
+					<td>{{ $feed->published_at }}</td>
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
 @endsection
