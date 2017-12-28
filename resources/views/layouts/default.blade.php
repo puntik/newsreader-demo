@@ -23,17 +23,28 @@
 					<div class="item">
 						<a href="/"><i class="home icon"></i></a>
 					</div>
-					<div class="right item">
-						@guest
-							<a href="/login">@lang('messages.signIn')</a>
-						@else
-							<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-								@lang('messages.signOut')
-							</a>
-							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-								{{ csrf_field() }}
-							</form>
-						@endguest
+					<div class="right menu">
+						<div class="item">
+							<div class="ui transparent icon input">
+								<form method="post" action="{{ route('searchResult') }}">
+									<input type="text" name="s" placeholder="Search...">
+									{{ csrf_field() }}
+									<i class="search link icon"></i>
+								</form>
+							</div>
+						</div>
+						<div class="item">
+							@guest
+								<a href="/login">@lang('messages.signIn')</a>
+							@else
+								<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+									@lang('messages.signOut')
+								</a>
+								<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+									{{ csrf_field() }}
+								</form>
+							@endguest
+						</div>
 					</div>
 				</div>
 				@yield('content')
