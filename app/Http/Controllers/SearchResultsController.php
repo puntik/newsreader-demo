@@ -20,10 +20,10 @@ class SearchResultsController extends Controller
 	public function __invoke(Request $request)
 	{
 		$this->validate($request, [
-			's' => 'required',
+			'q' => 'required',
 		]);
 
-		$term = $request->input('s');
+		$term = $request->input('q');
 
 		$feeds = $this->getFeedsFromElastic($term);
 
@@ -33,7 +33,7 @@ class SearchResultsController extends Controller
 	private function getFeedsFromElastic(string $search)
 	{
 		$body = [
-			"size"    => 20,
+			"size"    => 40,
 			"sort"    => [
 				[
 					"publishedAt" => [

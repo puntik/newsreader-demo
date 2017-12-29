@@ -26,8 +26,8 @@
 					<div class="right menu">
 						<div class="item">
 							<div class="ui transparent icon input">
-								<form method="post" action="{{ route('searchResult') }}">
-									<input type="text" name="s" placeholder="Search...">
+								<form method="get" action="{{ route('searchResult') }}">
+									<input type="text" name="q" placeholder="Search...">
 									{{ csrf_field() }}
 									<i class="search link icon"></i>
 								</form>
