@@ -1,6 +1,6 @@
 @extends('layouts.default')
 
-@section('title', 'asdfasdf')
+@section('title', __('messages.results'))
 
 @section('sidebar')
 	@component('categories', ['categories' => []])

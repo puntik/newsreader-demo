@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', __('messages.welcome'))
+
 @section('sidebar')
 	@component('categories', ['categories' => $categories])
 		@lang('Component categories not found or something is wrong')

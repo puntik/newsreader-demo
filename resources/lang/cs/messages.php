@@ -11,5 +11,7 @@ return [
 	'oneHourAgo'      => 'před hodinou',
 	'github'          => 'Github',
 
-	'foundResultsFor' => 'Výsledky hledání pro ":term"'
+	'foundResultsFor' => 'Výsledky hledání pro ":term"',
+	'welcome'         => 'Přehled zpráv',
+	'results'         => 'Výsledky hledání',
 ];
