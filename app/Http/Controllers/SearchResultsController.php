@@ -27,24 +27,31 @@ class SearchResultsController extends Controller
 
 		$feeds = $this->getFeedsFromElastic($term);
 
-		return view('searchResults.default', ['feeds' => $feeds]);
+		return view('searchResults.default', [
+			'feeds' => $feeds,
+			'term'  => $term,
+		]);
 	}
 
 	private function getFeedsFromElastic(string $search)
 	{
 		$body = [
-			"size"    => 40,
-			"sort"    => [
+			'size'    => 40,
+			'sort'    => [
 				[
-					"publishedAt" => [
-						"order" => "desc",
+					'publishedAt' => [
+						'order' => 'desc',
 					],
 				],
 			],
-			"_source" => ["id"],
-			"query"   => [
-				"match" => [
-					"title" => $search,
+			'_source' => ['id'],
+			'query'   => [
+				'multi_match' => [
+					'query'  => $search,
+					'fields' => [
+						'title',
+						'description',
+					],
 				],
 			],
 		];

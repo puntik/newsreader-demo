@@ -10,4 +10,6 @@ return [
 	'today'           => 'dnes',
 	'oneHourAgo'      => 'před hodinou',
 	'github'          => 'Github',
+
+	'foundResultsFor' => 'Výsledky hledání pro ":term"'
 ];

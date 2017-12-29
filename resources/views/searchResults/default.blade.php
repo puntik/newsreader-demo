@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-	<h1 class="ui header">Search results ..</h1>
+	<h1 class="ui header">@lang('messages.foundResultsFor', ['term' => $term])</h1>
 	<div class="ui divider"></div>
 	<div id="item-grid" class="ui grid two columns">
 		@foreach($feeds as $feed)
