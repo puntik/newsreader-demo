@@ -25,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		Feed::observe(FeedObserver::class);
+
+		resolve(\Laravel\Scout\EngineManager::class)->extend('elastic', function () {
+			return new \App\Model\Services\ElasticScout\ElasticEngine(
+				$this->app->make(Client::class)
+			);
+		});
 	}
 
 	/**

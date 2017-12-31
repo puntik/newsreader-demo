@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Model\Entity\Category;
+use App\Model\Entity\Feed;
+use App\Model\Entity\Source;
 use App\Model\Services\Category\EloquentCategoryRepository;
-use Illuminate\Support\Facades\DB;
 
 class HelloController extends Controller
 {
-
 	private const PAGE_SIZE = 24;
 
 	/** @var EloquentCategoryRepository */
@@ -48,26 +48,12 @@ class HelloController extends Controller
 
 	private function loadFeeds(int $categoryId)
 	{
-		// find all fields by category id
-		return DB::table('feed')
-				 ->join('source', 'source.id', '=', 'feed.source_id')
-				 ->join('category', 'category.id', '=', 'source.category_id')
-				 ->where('source.category_id', '=', $categoryId)
-				 ->select(
-					 [
-						 'feed.title',
-						 'feed.id',
-						 'feed.description',
-						 'feed.link',
-						 'category.id AS category_id',
-						 'category.title AS category',
-						 'source.title AS source',
-						 'published_at',
-						 'source.language',
-						 DB::raw('HOUR(TIMEDIFF(now(), published_at)) AS age_hours'),
-					 ]
-				 )
-				 ->orderBy('feed.published_at', 'desc')
-				 ->paginate(self::PAGE_SIZE);
+		$sources = Source::whereCategoryId($categoryId)->get(['id'])->map(function ($item) {
+			return $item['id'];
+		})->toArray();
+
+		return Feed::whereIn('source_id', $sources)
+				   ->orderBy('published_at', 'desc')
+				   ->paginate(self::PAGE_SIZE);
 	}
 }

@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Laravel\Scout\Searchable;
 
 class Feed extends Model
@@ -36,6 +37,14 @@ class Feed extends Model
 	public function searchableAs(): string
 	{
 		return self::FEED_INDEX;
+	}
+
+	public function ageInHours(): int
+	{
+		$now         = new Carbon();
+		$publishedAt = new Carbon($this->published_at);
+
+		return $now->diffInHours($publishedAt);
 	}
 
 	public function toSearchableArray()
