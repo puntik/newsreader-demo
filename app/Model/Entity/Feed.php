@@ -14,6 +14,15 @@ class Feed extends Model
 
 	protected $table = 'feed';
 
+	protected $fillable = [
+		'title',
+		'link',
+		'description',
+		'source_id',
+		'published_at',
+		'active',
+	];
+
 	protected $dates = [
 		'created_at',
 		'published_at',

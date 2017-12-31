@@ -47,11 +47,7 @@ class Downloader
 				throw new \InvalidArgumentException('Unexpected response code');
 			}
 
-			$feeds = $this->createFeedsFromFile($source, $rssFile);
-
-			foreach ($feeds as $feed) {
-				$feed->save();    // saving and indexing (in observer)
-			};
+			$this->createFeedsFromFile($source, $rssFile);
 		} catch (\GuzzleHttp\Exception\RequestException $e) {
 			Log::error(sprintf('Downloading source [%s, id: %d] failed.', $source->title, $source->id));
 			$source->disable()->save();
@@ -61,39 +57,29 @@ class Downloader
 		}
 	}
 
-	private function createFeedsFromFile(Source $source, string $rssFile): array
+	private function createFeedsFromFile(Source $source, string $rssFile): void
 	{
-		$feeds = [];
-		$root  = simplexml_load_file($rssFile);
+		$root = simplexml_load_file($rssFile);
 		if ($root === false) {
 			Log::error(sprintf("Problem with opening xml file %s.", $rssFile));
 
-			return $feeds;
+			return;
 		}
 
 		$items = $root->xpath('//rss/channel/item');
 
 		foreach ($items as $item) {
-			$old = Feed::where(['link' => $item->link])->first();
 
-			if ($old !== null) {
-				continue;
-			}
-
-			$publishedAt = new Carbon($item->pubDate);
-
-			$feed               = new Feed();
-			$feed->title        = (string) $item->title;
-			$feed->link         = (string) $item->link;
-			$feed->description  = (string) $item->description;
-			$feed->published_at = $publishedAt;
-			$feed->active       = true;
-
-			$feed->source()->associate($source);
-
-			$feeds[] = $feed;
+			Feed::updateOrCreate(
+				[
+					'link' => (string) $item->link,
+				], [
+					'title'        => (string) $item->title,
+					'description'  => (string) $item->description,
+					'source_id'    => $source->id,
+					'published_at' => new Carbon($item->pubDate),
+				]
+			);
 		}
-
-		return $feeds;
 	}
 }
