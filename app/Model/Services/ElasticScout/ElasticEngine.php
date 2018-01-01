@@ -4,39 +4,27 @@ namespace App\Model\Services\ElasticScout;
 
 use App\Model\Entity\Feed;
 use Elasticsearch\Client;
+use Illuminate\Database\Eloquent\Collection;
+use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
 class ElasticEngine extends Engine
 {
 
-	/** @var Client */
-	private $client;
+	/** @var ElasticSearcher */
+	private $elasticSearcher;
 
 	public function __construct(Client $client)
 	{
-		$this->client = $client;
+		$this->elasticSearcher = new ElasticSearcher($client);
 	}
 
-	/**
-	 * Update the given model in the index.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Collection $models
-	 *
-	 * @return void
-	 */
-	public function update($models)
+	public function update($models): void
 	{
 		// TODO: Implement update() method.
 	}
 
-	/**
-	 * Remove the given model from the index.
-	 *
-	 * @param  \Illuminate\Database\Eloquent\Collection $models
-	 *
-	 * @return void
-	 */
-	public function delete($models)
+	public function delete($models): void
 	{
 		// TODO: Implement delete() method.
 	}
@@ -44,56 +32,40 @@ class ElasticEngine extends Engine
 	/**
 	 * Perform the given search on the engine.
 	 *
-	 * @param  \Laravel\Scout\Builder $builder
+	 * @param  Builder $builder
 	 *
 	 * @return mixed
 	 */
-	public function search(\Laravel\Scout\Builder $builder)
+	public function search(Builder $builder)
 	{
-		return $this->getIdsFromElastic($builder->query);
+		return $this->elasticSearcher->get($builder->query);
 	}
 
 	/**
 	 * Perform the given search on the engine.
 	 *
-	 * @param  \Laravel\Scout\Builder $builder
-	 * @param  int                    $perPage
-	 * @param  int                    $page
+	 * @param  Builder $builder
+	 * @param  int     $perPage
+	 * @param  int     $page
 	 *
 	 * @return mixed
 	 */
-	public function paginate(\Laravel\Scout\Builder $builder, $perPage, $page)
+	public function paginate(Builder $builder, $perPage, $page)
 	{
-		return $this->getIdsFromElastic(
-			$builder->query,
-			$perPage,
-			$page
-		);
+		return $this->elasticSearcher
+			->size($perPage)
+			->page($page)
+			->get($builder->query);
 	}
 
-	/**
-	 * Pluck and return the primary keys of the given results.
-	 *
-	 * @param  mixed $results
-	 *
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function mapIds($results)
+	public function mapIds($results): array
 	{
 		return array_map(function ($item): int {
 			return $item['_source']['id'];
 		}, $results['hits']['hits']);
 	}
 
-	/**
-	 * Map the given results to instances of the given model.
-	 *
-	 * @param  mixed                               $results
-	 * @param  \Illuminate\Database\Eloquent\Model $model
-	 *
-	 * @return \Illuminate\Database\Eloquent\Collection
-	 */
-	public function map($results, $model)
+	public function map($results, $model): Collection
 	{
 		return Feed::whereIn(
 			'id',
@@ -101,54 +73,8 @@ class ElasticEngine extends Engine
 		)->orderBy('published_at', 'desc')->get();
 	}
 
-	/**
-	 * Get the total count from a raw result returned by the engine.
-	 *
-	 * @param  mixed $results
-	 *
-	 * @return int
-	 */
 	public function getTotalCount($results): int
 	{
 		return $results['hits']['total'];
-	}
-
-	private function getIdsFromElastic(
-		string $search,
-		int $size = 10,
-		int $page = 1
-	) {
-
-		$from = $page === 1 ? 0 : ($page - 1) * 10;
-
-		$body = [
-			'from'    => $from,
-			'size'    => $size,
-			'sort'    => [
-				[
-					'publishedAt' => [
-						'order' => 'desc',
-					],
-				],
-			],
-			'_source' => ['id'],
-			'query'   => [
-				'multi_match' => [
-					'query'  => $search,
-					'fields' => [
-						'title',
-						'description',
-					],
-				],
-			],
-		];
-
-		$params = [
-			'index' => 'a1',
-			'type'  => 'feed',
-			'body'  => $body,
-		];
-
-		return $this->client->search($params);
 	}
 }

@@ -17,4 +17,8 @@
 			@endcomponent
 		@endforeach
 	</div>
+	<div class="ui divider"></div>
+	<div class="ui right">
+		{{ $feeds->links('vendor.pagination.semantic-ui') }}
+	</div>
 @endsection

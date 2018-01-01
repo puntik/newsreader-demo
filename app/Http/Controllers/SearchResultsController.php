@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Entity\Feed;
 use Illuminate\Http\Request;
 
 class SearchResultsController extends Controller
@@ -24,8 +25,7 @@ class SearchResultsController extends Controller
 
 		$term = $request->input('q');
 
-		// $feeds = $this->getFeedsFromElastic($term);
-		$feeds = \App\Model\Entity\Feed::search($term)->get();
+		$feeds = Feed::search($term)->paginate(10);
 
 		return view('searchResults.default', [
 			'feeds' => $feeds,
@@ -33,5 +33,3 @@ class SearchResultsController extends Controller
 		]);
 	}
 }
-
-
