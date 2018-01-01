@@ -22,7 +22,7 @@ class ElasticSearcher
 
 		$this->page(1);
 		$this->size(10);
-		$this->index = env('ELASTIC_INDEX', 'index');
+		$this->index = env('ELASTIC_INDEX', 'a1');
 	}
 
 	public function page(int $page): self
@@ -49,6 +49,13 @@ class ElasticSearcher
 		$body = [
 			'from'    => $this->getFrom(),
 			'size'    => $this->size,
+			'sort'    => [
+				[
+					'publishedAt' => [
+						'order' => 'desc',
+					],
+				],
+			],
 			'_source' => ['id'],
 			'query'   => [
 				'multi_match' => [
