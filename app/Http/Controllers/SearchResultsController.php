@@ -8,14 +8,8 @@ use Illuminate\Http\Request;
 class SearchResultsController extends Controller
 {
 
-	/** @var \Elasticsearch\Client */
-	private $client;
-
-	public function __construct(
-		\Elasticsearch\Client $client
-	) {
-		$this->client = $client;
-	}
+	/** @var int */
+	private $perPage = 8;
 
 	public function __invoke(Request $request)
 	{
@@ -25,7 +19,7 @@ class SearchResultsController extends Controller
 
 		$term = $request->input('q');
 
-		$feeds = Feed::search($term)->paginate(10);
+		$feeds = Feed::search($term)->paginate($this->perPage);
 
 		return view('searchResults.default', [
 			'feeds' => $feeds,

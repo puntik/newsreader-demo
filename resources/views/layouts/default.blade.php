@@ -28,7 +28,6 @@
 							<div class="ui transparent icon input">
 								<form method="get" action="{{ route('searchResult') }}">
 									<input type="text" name="q" placeholder="Search...">
-									{{ csrf_field() }}
 									<i class="search link icon"></i>
 								</form>
 							</div>
