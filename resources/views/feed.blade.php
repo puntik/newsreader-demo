@@ -7,12 +7,18 @@
 			<div class="ui basic label">
 				<i class="cz flag"></i> {{ $feed->source->title }}
 			</div>
+
 			@if($feed->ageInHours() === 1)
 				<div class="ui label">@lang('messages.oneHourAgo')</div>
 			@endif
 			@if($feed->ageInHours() < (new DateTime())->format('H'))
 				<div class="ui label">@lang('messages.today')</div>
 			@endif
+			<span class="ui labels">
+				@foreach($feed->tags as $tag)
+					<div class="ui label">{{ $tag->title }}</div>
+				@endforeach
+			</span>
 		</div>
 	</div>
 </div>

@@ -12,10 +12,7 @@
 	<h1 class="ui header">{{ $category->title }}</h1>
 	<div class="ui divider"></div>
 	<div id="item-grid" class="ui grid two columns">
-		@foreach($feeds as $feed)
-			@component('feed', ['feed' => $feed])
-			@endcomponent
-		@endforeach
+		@each('feed', $feeds, 'feed')
 	</div>
 	<div class="ui divider"></div>
 	<div class="ui right">
