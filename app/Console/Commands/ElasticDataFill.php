@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Model\Entity\Feed;
+use App\Model\Entity\Tag;
 use App\Model\Services\Elastic;
 use Illuminate\Console\Command;
 
@@ -39,6 +40,15 @@ class ElasticDataFill extends Command
 		Feed::chunk(self::CHUNK_SIZE, function ($feeds) use ($bar) {
 			foreach ($feeds as $feed) {
 				$this->elastic->indexFeed($feed);
+				$tags = $this->elastic->percolateTags($feed);
+
+				$feed->tags()->detach();
+
+				/** @var Feed $tag */
+				foreach ($tags as $tag) {
+					$tagEntity = Tag::whereTitle($tag)->first();
+					$tagEntity->feeds()->attach($feed->id);
+				}
 			}
 			$bar->advance();
 		});

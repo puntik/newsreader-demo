@@ -16,10 +16,6 @@ class EventServiceProvider extends ServiceProvider
 		'App\Events\Event'                     => [
 			'App\Listeners\EventListener',
 		],
-		\App\Events\Clubcard\SavedEvent::class => [
-			\App\Listeners\Clubcard\SavedListener::class,
-			\App\Listeners\Clubcard\ClubcardSlackNotificationSavedListener::class,
-		],
 	];
 
 	/**

@@ -1,8 +1,5 @@
 <?php
 
-namespace App\Listeners\Clubcard;
-
-use App\Events\Clubcard\SavedEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
