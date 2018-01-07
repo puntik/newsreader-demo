@@ -19,5 +19,13 @@ class FeedObserver
 	public function saved(Feed $feed): void
 	{
 		$this->elastic->indexFeed($feed);
+
+		$tags = $this->elastic->percolateTags($feed);
+
+		$feed->tags()->detach();
+		foreach ($tags as $tag) {
+			$tagEntity = Tag::whereTitle($tag)->first();
+			$tagEntity->feeds()->attach($feed->id);
+		}
 	}
 }

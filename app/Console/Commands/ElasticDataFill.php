@@ -46,8 +46,6 @@ class ElasticDataFill extends Command
 				$tags = $this->elastic->percolateTags($feed);
 
 				$feed->tags()->detach();
-
-				/** @var Feed $tag */
 				foreach ($tags as $tag) {
 					$tagEntity = Tag::whereTitle($tag)->first();
 					$tagEntity->feeds()->attach($feed->id);
