@@ -3,6 +3,7 @@
 namespace App\Model\Services;
 
 use App\Model\Entity\Feed;
+use App\Model\Entity\Tag;
 use Elasticsearch\Client;
 
 class Elastic
@@ -65,5 +66,72 @@ class Elastic
 		}
 
 		return array_sort(array_unique($tags));
+	}
+
+	public function indexTaggedQueries()
+	{
+		$index = sprintf('%s_tags', $this->indexName);
+		$input = $this->loadSearchableTags();
+
+		foreach ($input as $term => $tags) {
+
+			$this->saveTags($tags);
+
+			$indexedData = [
+				'query' => [
+					'multi_match' => [
+						'query'  => $term,
+						'fields' => [
+							'title',
+							'description',
+						],
+					],
+				],
+				'meta'  => [
+					'tags' => $tags,
+				],
+			];
+
+			$this->client->index([
+				'index' => $index,
+				'type'  => 'tags',
+				'body'  => $indexedData,
+			]);
+		}
+	}
+
+	private function saveTags(array $tags)
+	{
+		foreach ($tags as $tag) {
+			Tag::firstOrCreate(['title' => $tag]);
+		}
+	}
+
+	private function loadSearchableTags(): array
+	{
+		return [
+			'php' => ['php'],
+
+			'laravel'  => ['php', 'laravel'],
+			'lumen'    => ['php', 'laravel', 'lumen'],
+			'eloquent' => ['php', 'laravel', 'eloquent', 'db'],
+			'blade'    => ['php', 'laravel', 'blade'],
+			'scout'    => ['php', 'laravel', 'scout'],
+
+			'mysql'      => ['db', 'mysql'],
+			'postgresql' => ['db', 'postgresql'],
+			'redis'      => ['db', 'redis'],
+
+			'nette' => ['php', 'nette'],
+			'latte' => ['php', 'nette', 'latte'],
+			'tracy' => ['php', 'nette', 'tracy'],
+
+			'elasticsearch' => ['elasticsearch'],
+			'logstash'      => ['elasticsearch', 'logstash'],
+			'kibana'        => ['elasticsearch', 'kibana'],
+
+			'symfony' => ['php', 'symfony'],
+			'twig'    => ['php', 'symfony', 'twig'],
+		];
 	}
 }

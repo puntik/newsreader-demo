@@ -51,6 +51,15 @@ class ElasticCreate extends Command
 				],
 			]
 		);
+
+		$this->esClient->indices()->create(
+			[
+				'index' => $indexName . '_tags',
+				'body'  => [
+					'mappings' => $this->createPercolatorMapping(),
+				],
+			]
+		);
 	}
 
 	private function createMapping()
@@ -102,6 +111,32 @@ class ElasticCreate extends Command
 					'czech_stemmer' => [
 						'type'     => 'stemmer',
 						'language' => 'czech',
+					],
+				],
+			],
+		];
+	}
+
+	private function createPercolatorMapping()
+	{
+		return [
+			'doctype' => [
+				'properties' => [
+					'title'       => [
+						'type'     => 'text',
+						'analyzer' => 'czech',
+					],
+					'description' => [
+						'type'     => 'text',
+						'analyzer' => 'czech',
+
+					],
+				],
+			],
+			'tags'    => [
+				'properties' => [
+					'query' => [
+						'type' => 'percolator',
 					],
 				],
 			],

@@ -44,5 +44,9 @@ class ElasticDelete extends Command
 		$this->esClient->indices()->delete([
 			'index' => $indexName,
 		]);
+
+		$this->esClient->indices()->delete([
+			'index' => $indexName . '_tags',
+		]);
 	}
 }

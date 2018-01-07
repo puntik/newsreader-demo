@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
@@ -14,7 +15,7 @@ class Tag extends Model
 		'query',
 	];
 
-	public function feeds()
+	public function feeds(): BelongsToMany
 	{
 		return $this->belongsToMany(Feed::class);
 	}
