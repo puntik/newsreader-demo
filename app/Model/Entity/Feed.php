@@ -34,6 +34,11 @@ class Feed extends Model
 		return $this->belongsTo(Source::class);
 	}
 
+	public function tags()
+	{
+		return $this->belongsToMany(Tag::class);
+	}
+
 	public function searchableAs(): string
 	{
 		return self::FEED_INDEX;
