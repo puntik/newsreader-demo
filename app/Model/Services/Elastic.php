@@ -75,7 +75,6 @@ class Elastic
 
 		foreach ($input as $term => $tags) {
 
-			$this->saveTags($tags);
 
 			$indexedData = [
 				'query' => [
@@ -100,8 +99,11 @@ class Elastic
 		}
 	}
 
-	private function saveTags(array $tags)
+	public function refreshTags(): void
 	{
+		$input = $this->loadSearchableTags();
+		$tags  = array_unique(array_flatten(array_values($input)));
+
 		foreach ($tags as $tag) {
 			Tag::firstOrCreate(['title' => $tag]);
 		}
@@ -117,6 +119,7 @@ class Elastic
 			'eloquent' => ['php', 'laravel', 'eloquent', 'db'],
 			'blade'    => ['php', 'laravel', 'blade'],
 			'scout'    => ['php', 'laravel', 'scout'],
+			'tinker'   => ['php', 'laravel', 'tinker'],
 
 			'mysql'      => ['db', 'mysql'],
 			'postgresql' => ['db', 'postgresql'],

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Model\Entity\Feed;
+use App\Model\Entity\Tag;
 use App\Model\Services\Elastic;
 
 class FeedObserver
@@ -19,13 +20,10 @@ class FeedObserver
 	public function saved(Feed $feed): void
 	{
 		$this->elastic->indexFeed($feed);
-
-		$tags = $this->elastic->percolateTags($feed);
-
-		$feed->tags()->detach();
-		foreach ($tags as $tag) {
-			$tagEntity = Tag::whereTitle($tag)->first();
-			$tagEntity->feeds()->attach($feed->id);
-		}
+		$tagStrings = $this->elastic->percolateTags($feed);
+		$tags       = Tag::whereIn('title', $tagStrings)->get(['id'])->map(function ($item) {
+			return $item->id;
+		})->toArray();
+		$feed->tags()->sync($tags);
 	}
 }
