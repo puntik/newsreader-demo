@@ -23,7 +23,7 @@ class HelloController extends Controller
 	{
 		$categories = $this->categoryRepository->loadCategories();
 		$category   = Category::find($id);
-		$feeds      = $category->feeds()->paginate(self::PAGE_SIZE);
+		$feeds      = $category->feeds()->orderByDesc('published_at')->paginate(self::PAGE_SIZE);
 
 		$flags = [
 			'cs' => 'cz',
