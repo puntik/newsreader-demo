@@ -13,6 +13,7 @@ class Source extends Model
 	protected $dates = [
 		'created_at',
 		'published_at',
+		'deleted_at',
 	];
 
 	public function feeds(): HasMany
@@ -23,6 +24,13 @@ class Source extends Model
 	public function category()
 	{
 		return $this->belongsTo(Category::class);
+	}
+
+	public function enable(): self
+	{
+		$this->active = true;
+
+		return $this;
 	}
 
 	public function disable(): self
