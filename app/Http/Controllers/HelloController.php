@@ -8,22 +8,24 @@ use App\Model\Services\Category\EloquentCategoryRepository;
 class HelloController extends Controller
 {
 
-	private const PAGE_SIZE = 24;
-
 	/** @var EloquentCategoryRepository */
 	private $categoryRepository;
+
+	/** @var int */
+	private $perPage;
 
 	public function __construct(
 		EloquentCategoryRepository $categoryRepository
 	) {
 		$this->categoryRepository = $categoryRepository;
+		$this->perPage            = (int) env('NEWSREADER_FEEDS_PER_PAGE', 24);
 	}
 
 	public function __invoke(int $id, string $categoryName)
 	{
 		$categories = $this->categoryRepository->loadCategories();
 		$category   = Category::find($id);
-		$feeds      = $category->feeds()->orderByDesc('published_at')->paginate(self::PAGE_SIZE);
+		$feeds      = $category->feeds()->orderByDesc('published_at')->paginate($this->perPage);
 
 		$flags = [
 			'cs' => 'cz',

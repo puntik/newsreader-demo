@@ -9,7 +9,12 @@ class SearchResultsController extends Controller
 {
 
 	/** @var int */
-	private $perPage = 8;
+	private $perPage;
+
+	public function __construct()
+	{
+		$this->perPage = (int) env('NEWSREADER_FEEDS_PER_PAGE', 24);
+	}
 
 	public function __invoke(Request $request)
 	{
