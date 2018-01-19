@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Storage;
 class Downloader
 {
 
+	private const ERROR_NUMBER    = 5;
 	private const FEED_SOURCE_DIR = 'feed_source';
+	private const WARNING_NUMBER  = 2;
 
 	/** @var Client */
 	private $guzzleClient;
@@ -39,7 +41,7 @@ class Downloader
 		$rssFile  = sprintf('%s/%d.xml', Storage::path(self::FEED_SOURCE_DIR), $source->id);
 		$cacheKey = sprintf('source.failed.%d', $source->id);
 
-		$failedAttemps = Cache::rememberForever($cacheKey, function () { return 0; });
+		$failedAttempts = Cache::rememberForever($cacheKey, function () { return 0; });
 
 		try {
 			$response = $this->guzzleClient->get($source->url, [
@@ -53,25 +55,41 @@ class Downloader
 
 			$this->createFeedsFromFile($source, $rssFile);
 
-			// reseting cache when success
-			Cache::put($cacheKey, 0);
+			// reset cache when success
+			$this->resetCache($cacheKey);
 		} catch (\Throwable $e) {
-			$failedAttemps = Cache::increment($cacheKey);
+			$failedAttempts = Cache::increment($cacheKey);
 		}
 
-		if ($failedAttemps > 2) {
-			Log::warning(sprintf('Source #%d "%s" is about to be disabled. Number of parse attemp: %s',
+		if ($failedAttempts > self::WARNING_NUMBER) {
+			Log::warning(sprintf('Source #%d "%s" is about to be disabled. Number of failed attempts is %d',
 					$source->id,
 					$source->title,
-					$failedAttemps
+					$failedAttempts
 				)
 			);
 		}
 
-		if ($failedAttemps > 5) {
+		if ($failedAttempts > self::ERROR_NUMBER) {
 			$source->disable()->save();
 			Log::error(sprintf('Source #%d "%s" was disabled.', $source->id, $source->title));
 		}
+	}
+
+	private function resetCache(string $key): void
+	{
+		$failedAttempts = Cache::get($key);
+		if ($failedAttempts === 0) {
+			return;
+		}
+
+		Log::info(sprintf(
+				'Resetting number of attempts for key #%s, number of failed attempts %d.',
+				$key,
+				$failedAttempts
+			)
+		);
+		Cache::put($key, 0);
 	}
 
 	private function createFeedsFromFile(Source $source, string $rssFile): void
