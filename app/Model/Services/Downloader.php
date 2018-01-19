@@ -21,9 +21,13 @@ class Downloader
 	/** @var Client */
 	private $guzzleClient;
 
+	/** @var FeedFileParser */
+	private $parser;
+
 	public function __construct(Client $guzzleClient)
 	{
 		$this->guzzleClient = $guzzleClient;
+		$this->parser       = new FeedFileParser();
 	}
 
 	public function processSources(): void
@@ -53,7 +57,7 @@ class Downloader
 				throw new \InvalidArgumentException('Unexpected response code');
 			}
 
-			$this->createFeedsFromFile($source, $rssFile);
+			$this->parser->createFromFile($source->id, $rssFile);
 
 			// reset cache when success
 			$this->resetCache($cacheKey);
@@ -90,31 +94,5 @@ class Downloader
 			)
 		);
 		Cache::put($key, 0);
-	}
-
-	private function createFeedsFromFile(Source $source, string $rssFile): void
-	{
-		$root = simplexml_load_file($rssFile);
-		if ($root === false) {
-			Log::error(sprintf("Problem with opening xml file %s.", $rssFile));
-
-			return;
-		}
-
-		$items = $root->xpath('//rss/channel/item');
-
-		foreach ($items as $item) {
-
-			Feed::updateOrCreate(
-				[
-					'link' => (string) $item->link,
-				], [
-					'title'        => (string) $item->title,
-					'description'  => (string) $item->description,
-					'source_id'    => $source->id,
-					'published_at' => new Carbon($item->pubDate),
-				]
-			);
-		}
 	}
 }
