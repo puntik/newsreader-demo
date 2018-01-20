@@ -11,7 +11,7 @@
 @section('content')
 	<h1 class="ui header">{{ $category->title }}</h1>
 	<div class="ui divider"></div>
-	<div id="item-grid" class="ui grid two columns">
+	<div id="item-grid" class="ui two columns stackable grid">
 		@each('feed', $feeds, 'feed')
 	</div>
 	<div class="ui divider"></div>
