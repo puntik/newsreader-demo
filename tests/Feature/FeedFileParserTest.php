@@ -9,16 +9,38 @@ use Tests\TestCase;
 class FeedFileParserTest extends TestCase
 {
 
-	/** @test */
-	public function itCanParseRssFile()
+	/**
+	 * @test
+	 * @dataProvider validRssFiles
+	 */
+	public function itCanParseRssFile(string $filename, int $expected)
 	{
-		$this->markTestIncomplete();
+		// Given
+		$parser      = new FeedFileParser();
+		$inputString = $this->getDataPath($filename);
+
+		// When
+		$items = $parser->getItems($inputString);
+
+		// Then
+		$this->assertCount($expected, $items);
 	}
 
-	/** @test */
-	public function itCanParseAtomFile()
+	/**
+	 * @test
+	 * @dataProvider validRssFiles
+	 */
+	public function itCanParseAtomFile(string $filename, int $expected)
 	{
-		$this->markTestIncomplete();
+		// Given
+		$parser      = new FeedFileParser();
+		$inputString = $this->getDataPath($filename);
+
+		// When
+		$items = $parser->getItems($inputString);
+
+		// Then
+		$this->assertCount($expected, $items);
 	}
 
 	/** @test */
@@ -26,13 +48,13 @@ class FeedFileParserTest extends TestCase
 	{
 		// Given
 		$parser      = new FeedFileParser();
-		$inputString = __DIR__ . '/../data/invalid_xml_feed.xml';
+		$inputString = $this->getDataPath('invalid_xml_feed.xml');
 
 		Log::shouldReceive('error')->once();
 		$this->expectException(\InvalidArgumentException::class);
 
 		// When and Then
-		$parser->createFromFile(1, $inputString);
+		$parser->getItems($inputString);
 	}
 
 	/** @test */
@@ -40,12 +62,31 @@ class FeedFileParserTest extends TestCase
 	{
 		// Given
 		$parser      = new FeedFileParser();
-		$inputString = __DIR__ . '/../data/missing_feel.xml';
+		$inputString = $this->getDataPath('missing_feel.xml');
 
 		Log::shouldReceive('error')->once();
 		$this->expectException(\InvalidArgumentException::class);
 
 		// When and Then
-		$parser->createFromFile(1, $inputString);
+		$parser->getItems($inputString);
+	}
+
+	public function validRssFiles()
+	{
+		return [
+			['valid_atom_feed.xml', 100],
+		];
+	}
+
+	public function validAtomFiles()
+	{
+		return [
+			['valid_rss_feed.xml', 30],
+		];
+	}
+
+	private function getDataPath(string $file): string
+	{
+		return sprintf('%s/../data/%s', __DIR__, $file);
 	}
 }

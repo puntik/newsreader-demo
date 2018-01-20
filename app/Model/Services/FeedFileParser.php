@@ -2,33 +2,70 @@
 
 namespace App\Model\Services;
 
-use App\Model\Entity\Feed;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class FeedFileParser
 {
 
-	public function createFromFile(int $sourceId, string $inputFile): void
+	/**
+	 * @param string $inputFile
+	 *
+	 * @return array
+	 */
+	public function getItems(string $inputFile): array
 	{
 		$root = $this->getFeedRoot($inputFile);
 
-		$items = $root->xpath('//rss/channel/item');
-
-		foreach ($items as $item) {
-
-			Feed::updateOrCreate(
-				[
-					'link' => (string) $item->link,
-				], [
-					'title'        => (string) $item->title,
-					'description'  => (string) $item->description,
-					'source_id'    => $sourceId,
-					'published_at' => new Carbon($item->pubDate),
-				]
-			);
+		if ($root->getName() === 'feed') {
+			return $this->processAtom($root);
 		}
+
+		if ($root->getName() === 'rss') {
+			return $this->processRss($root);
+		}
+	}
+
+	private function processAtom(\SimpleXMLElement $root): array
+	{
+		$feeds = [];
+
+		foreach ($root->entry as $item) {
+			$publishedAt = Carbon::createFromFormat(Carbon::ATOM, $item->updated);
+			$link        = (string) $item->link->attributes()->href;
+
+			$feed = [
+				'link'         => $link,
+				'title'        => (string) $item->title,
+				'description'  => (string) $item->summary,
+				'published_at' => $publishedAt->format(Carbon::DEFAULT_TO_STRING_FORMAT),
+			];
+
+			$feeds[] = $feed;
+		}
+
+		return $feeds;
+	}
+
+	private function processRss(\SimpleXMLElement $root): array
+	{
+		$feeds = [];
+
+		foreach ($root->channel->item as $item) {
+			$publishedAt = Carbon::createFromFormat(Carbon::RSS, $item->pubDate);
+
+			$feed = [
+				'link'         => (string) $item->link,
+				'title'        => (string) $item->title,
+				'description'  => (string) $item->description,
+				'published_at' => $publishedAt->format(Carbon::DEFAULT_TO_STRING_FORMAT),
+			];
+
+			$feeds[] = $feed;
+		}
+
+		return $feeds;
 	}
 
 	private function getFeedRoot(string $inputFile): \SimpleXMLElement

@@ -57,7 +57,25 @@ class Downloader
 				throw new \InvalidArgumentException('Unexpected response code');
 			}
 
-			$this->parser->createFromFile($source->id, $rssFile);
+			$items   = $this->parser->getItems($rssFile);
+			$cleaner = new FeedCleaner();
+
+			foreach ($items as $item) {
+				try {
+					Feed::firstOrCreate(
+						[
+							'link' => $item['link'],
+						], [
+							'title'        => $item['title'],
+							'description'  => $cleaner->run($item['description']),
+							'source_id'    => $source->id,
+							'published_at' => new Carbon($item['published_at']),
+						]
+					);
+				} catch (\Illuminate\Database\QueryException $e) {
+					Log::error($e->getMessage());
+				}
+			}
 
 			// reset cache when success
 			$this->resetCache($cacheKey);
