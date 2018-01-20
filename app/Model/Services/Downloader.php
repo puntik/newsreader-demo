@@ -58,7 +58,7 @@ class Downloader
 			}
 
 			$items   = $this->parser->getItems($rssFile);
-			$cleaner = new FeedCleaner();
+			$cleaner = FeedCleaner::getInstance();
 
 			foreach ($items as $item) {
 				try {

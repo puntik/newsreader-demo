@@ -15,7 +15,7 @@ class FeedCleanerTest extends TestCase
 	public function itCanCleanInputString(string $input, string $expected)
 	{
 		// Given
-		$cleaner = new FeedCleaner();
+		$cleaner = FeedCleaner::getInstance();
 
 		// When
 		$cleaned = $cleaner->run($input);
@@ -32,7 +32,7 @@ class FeedCleanerTest extends TestCase
 	{
 		// Given
 		$tested['text'] = $input;
-		$cleaner        = new FeedCleaner();
+		$cleaner        = FeedCleaner::getInstance();
 
 		// When
 		$cleaned = $cleaner->run($tested);

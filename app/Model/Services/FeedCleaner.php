@@ -5,6 +5,22 @@ namespace App\Model\Services;
 class FeedCleaner
 {
 
+	/** @var self */
+	private static $instance;
+
+	private function __construct()
+	{
+	}
+
+	public static function getInstance(): self
+	{
+		if (self::$instance === null) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
+	}
+
 	/**
 	 * @param array|string $input
 	 *
